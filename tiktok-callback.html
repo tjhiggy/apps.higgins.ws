@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TikTok Authorization — Friday Content Publisher</title>
+<style>
+body{font-family:-apple-system,Helvetica,Arial,sans-serif;max-width:640px;margin:48px auto;padding:0 24px;color:#1a1a1a;line-height:1.6}
+h1{font-size:24px}
+#code{font-family:monospace;font-size:15px;background:#f4f4f4;border:1px solid #ddd;border-radius:8px;padding:16px;word-break:break-all;user-select:all}
+button{font-size:15px;padding:10px 20px;border-radius:8px;border:none;background:#0b5fff;color:#fff;cursor:pointer;margin-top:12px}
+#error{color:#b00020}
+.hint{color:#666;font-size:14px}
+</style>
+</head>
+<body>
+<h1>TikTok Authorization</h1>
+<div id="content"><p class="hint">Waiting for TikTok's response…</p></div>
+<script>
+(function(){
+  var params = new URLSearchParams(window.location.search);
+  var code = params.get('code');
+  var error = params.get('error');
+  var el = document.getElementById('content');
+  if (error) {
+    el.innerHTML = '<p id="error">Authorization failed: ' +
+      error.replace(/</g,'&lt;') + '</p><p class="hint">Please try the authorization step again.</p>';
+  } else if (code) {
+    el.innerHTML = '<p>Authorization successful. Copy this code:</p>' +
+      '<div id="code">' + code.replace(/</g,'&lt;') + '</div>' +
+      '<button id="copy">Copy code</button>' +
+      '<p class="hint">Paste it where prompted to finish connecting Friday Content Publisher.</p>';
+    document.getElementById('copy').onclick = function(){
+      navigator.clipboard.writeText(code).then(function(){ alert('Copied.'); });
+    };
+  } else {
+    el.innerHTML = '<p class="hint">No authorization code was received. If you were approving the app, please try again.</p>';
+  }
+})();
+</script>
+</body>
+</html>
